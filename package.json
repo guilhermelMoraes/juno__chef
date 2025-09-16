@@ -1,0 +1,29 @@
+{
+  "name": "kitchen",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "prettier src/**/*.{ts,json} --write && eslint src/**/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilhermelMoraes/juno-kitchen.git"
+  },
+  "author": "Guilherme Moraes <moraes.guilherme32@proton.me>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guilhermelMoraes/juno-kitchen/issues"
+  },
+  "homepage": "https://github.com/guilhermelMoraes/juno-kitchen#readme",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@eslint/json": "^0.13.2",
+    "@types/node": "^24.5.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "prettier": "3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0"
+  }
+}
