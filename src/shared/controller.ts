@@ -1,4 +1,4 @@
-import Repository from "./repository.interface";
+import Repository from './repository.interface';
 
 abstract class ExpressController {
   private readonly repository: Repository;
@@ -7,9 +7,7 @@ abstract class ExpressController {
     this.repository = repository;
   }
 
-  async list(): Promise<void> {
-
-  }
+  async list(): Promise<void> {}
 }
 
 export default ExpressController;
