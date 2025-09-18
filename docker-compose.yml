@@ -1,0 +1,12 @@
+name: juno-kitchen
+services:
+  keycloak:
+    container_name: juno-keycloak
+    image: quay.io/keycloak/keycloak:26.3.4
+    ports:
+      - 8080:8080
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: juno-admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: jun0-s3cret_p4ssw0rd
+    command: ["start-dev"]
+    

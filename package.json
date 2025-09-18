@@ -2,6 +2,7 @@
   "name": "kitchen",
   "version": "1.0.0",
   "scripts": {
+    "predev": "docker compose up -d",
     "dev": "nodemon src/main.ts | pino-pretty",
     "lint": "prettier src/**/*.{ts,json} --write && eslint src/**/*.ts"
   },
