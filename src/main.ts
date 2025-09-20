@@ -1,20 +1,28 @@
 import 'reflect-metadata';
 // Every other import should go after this line:
-
 import express from 'express';
+import dotenv from '@dotenvx/dotenvx';
 
 import AppLogger from './shared/logger';
 import router from './router';
+import DatabaseConfig from './shared/database.config';
 
 class Application {
-  static main() {
-    const logger = new AppLogger();
+  private static readonly logger = AppLogger.getInstance();
+  private static readonly port = parseInt(process.env.SERVER_PORT!) || 3000;
+
+  static async main(): Promise<void> {
+    dotenv.config({ ignore: ['MISSING_ENV_FILE'] });
+    const database = DatabaseConfig.getInstance();
+
+    await database.connect();
     const server = express();
 
+    server.use(express.json());
     server.use('/api/v1', router);
 
-    server.listen(3000, () => {
-      logger.info('Server is running on port 3000');
+    server.listen(this.port, () => {
+      this.logger.info(`Server is running on port ${this.port}`);
     });
   }
 }

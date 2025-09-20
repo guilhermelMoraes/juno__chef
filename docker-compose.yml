@@ -1,5 +1,17 @@
 name: juno-kitchen
 services:
+  postgresql:
+    container_name: juno-postgresql
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DATABASE}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    restart: unless-stopped
   keycloak:
     container_name: juno-keycloak
     image: quay.io/keycloak/keycloak:26.3.4
@@ -9,4 +21,6 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: juno-admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: jun0-s3cret_p4ssw0rd
     command: ["start-dev"]
-    
+
+volumes:
+  postgresql_data:

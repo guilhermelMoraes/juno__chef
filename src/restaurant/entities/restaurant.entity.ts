@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-import Restaurant from "./restaurant.model";
+import Restaurant from "../restaurant.model";
+import HoursOfOperationEntity from "./hours-of-operation.entity";
 
 @Entity('restaurants')
 class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address'> {
@@ -26,7 +27,7 @@ class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address
     unique: true,
   })
   phone!: string;
-  
+
   @Column({
     type: 'varchar',
     length: 20,
@@ -46,6 +47,18 @@ class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address
     unique: true,
   })
   website?: string;
+
+  @OneToMany(() => HoursOfOperationEntity, (ho) => ho.restaurant)
+  hoursOfOperation!: HoursOfOperationEntity[];
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
+
+  @DeleteDateColumn()
+  deletedAt!: Date;
 }
 
 export default RestaurantEntity;

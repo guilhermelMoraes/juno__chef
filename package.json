@@ -1,9 +1,9 @@
 {
   "name": "kitchen",
   "version": "1.0.0",
+  "main": "src/main.ts",
   "scripts": {
-    "predev": "docker compose up -d",
-    "dev": "nodemon src/main.ts | pino-pretty",
+    "dev": "./dev.sh",
     "lint": "prettier src/**/*.{ts,json} --write && eslint src/**/*.ts"
   },
   "repository": {
@@ -33,7 +33,9 @@
     "typescript-eslint": "^8.44.0"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.50.1",
     "express": "^5.1.0",
+    "pg": "^8.16.3",
     "pino": "^9.9.5",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.26"
