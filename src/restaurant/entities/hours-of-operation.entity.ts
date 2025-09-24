@@ -6,11 +6,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { IHoursOfOperation } from '../value-objects/hours-of-operation.value-object';
 import RestaurantEntity from './restaurant.entity';
-import { HoursOfOperation } from '../../restaurant.model';
 
 @Entity('hours_of_operation')
-class HoursOfOperationEntity implements HoursOfOperation {
+class HoursOfOperationEntity implements IHoursOfOperation {
   @PrimaryGeneratedColumn()
   id!: number;
 

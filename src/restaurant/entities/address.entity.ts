@@ -7,11 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Address } from '../../restaurant.model';
+import { IAddress } from '../value-objects/address.value-object';
 import RestaurantEntity from './restaurant.entity';
 
 @Entity('addresses')
-class AddressEntity implements Address {
+class AddressEntity implements IAddress {
   @PrimaryGeneratedColumn()
   id?: number;
 

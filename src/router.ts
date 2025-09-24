@@ -2,15 +2,15 @@ import { Router } from 'express';
 
 import restaurantRoutes from './restaurant/restaurant.routes';
 
-const router = Router();
+const v1router = Router();
 
-router.use('/restaurants', restaurantRoutes);
+v1router.use('/restaurants', restaurantRoutes);
 
-router.get('/healthcheck', (_req, res) => {
+v1router.get('/healthcheck', (_req, res) => {
   res.json({
     message: 'OK',
     time: new Date(),
   });
 });
 
-export default router;
+export default v1router;

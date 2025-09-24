@@ -1,13 +1,13 @@
 import Repository from '../../shared/database/repository';
-import { Address } from '../restaurant.model';
+import AddressEntity from '../entities/address.entity';
+import HoursOfOperationEntity from '../entities/hours-of-operation.entity';
+import RestaurantEntity from '../entities/restaurant.entity';
+import { IAddress } from '../value-objects/address.value-object';
 import AddressRepository from './address.repository';
-import AddressEntity from './entities/address.entity';
-import HoursOfOperationEntity from './entities/hours-of-operation.entity';
-import RestaurantEntity from './entities/restaurant.entity';
 import HoursOfOperationRepository from './hours-of-operation.repository';
 
 interface Insert extends Partial<RestaurantEntity> {
-  address: Address;
+  address: IAddress;
 }
 
 class RestaurantRepository extends Repository<RestaurantEntity> {

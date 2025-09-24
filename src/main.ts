@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import dotenv from '@dotenvx/dotenvx';
 import express from 'express';
 
-import router from './router';
+import v1router from './router';
 import DatabaseConfig from './shared/database/database.config';
 import AppLogger from './shared/logger';
 
@@ -19,7 +19,7 @@ class Application {
     const server = express();
 
     server.use(express.json());
-    server.use('/api/v1', router);
+    server.use('/api/v1', v1router);
 
     server.listen(this.port, () => {
       this.logger.info(`Server is running on port ${this.port}`);

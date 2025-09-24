@@ -9,9 +9,7 @@ import JunoValidationError from '../shared/juno-validation.error';
 class RestaurantController {
   private readonly logger = AppLogger.getInstance();
 
-  constructor(
-    private readonly repository: IRepository
-  ) { }
+  constructor(private readonly repository: IRepository) {}
 
   async create(request: Request, response: Response): Promise<void> {
     try {
