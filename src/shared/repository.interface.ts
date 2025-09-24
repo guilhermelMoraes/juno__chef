@@ -1,5 +1,5 @@
-interface Repository<T = unknown> {
-  list(): Promise<T[]>;
+interface IRepository<T = unknown> {
+  create(data: Partial<T>): Promise<T>;
 }
 
-export default Repository;
+export default IRepository;

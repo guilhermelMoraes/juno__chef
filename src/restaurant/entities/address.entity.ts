@@ -1,8 +1,16 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import RestaurantEntity from "./restaurant.entity";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { Address } from '../restaurant.model';
+import RestaurantEntity from './restaurant.entity';
 
 @Entity('addresses')
-class AddressEntity {
+class AddressEntity implements Address {
   @PrimaryGeneratedColumn()
   id?: number;
 
@@ -28,11 +36,8 @@ class AddressEntity {
   })
   aptUnit?: string;
 
-  @OneToOne(
-    () => RestaurantEntity,
-    { cascade: true },
-  )
-  @JoinColumn()
+  @OneToOne(() => RestaurantEntity, { cascade: true })
+  @JoinColumn({ name: 'restaurant_id' })
   restaurant!: RestaurantEntity;
 }
 

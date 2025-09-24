@@ -1,7 +1,15 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-import Restaurant from "../restaurant.model";
-import HoursOfOperationEntity from "./hours-of-operation.entity";
+import Restaurant from '../restaurant.model';
+import HoursOfOperationEntity from './hours-of-operation.entity';
 
 @Entity('restaurants')
 class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address'> {

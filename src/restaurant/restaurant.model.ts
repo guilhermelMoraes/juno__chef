@@ -1,3 +1,15 @@
+interface HoursOfOperation {
+  days: string[];
+  hours: string[][];
+}
+
+interface Address {
+  number: number;
+  postalCode: string;
+  street: string;
+  aptUnit?: string;
+}
+
 interface Restaurant {
   id?: string;
   name: string;
@@ -6,16 +18,9 @@ interface Restaurant {
   cnpj: string;
   owner: string;
   website?: string;
-  hoursOfOperation: {
-    days: string[],
-    hours: string[],
-  },
-  address: {
-    number: number;
-    postalCode: string;
-    street: string;
-    aptUnit?: string;
-  }
+  hoursOfOperation: HoursOfOperation[];
+  address: Address;
 }
 
 export default Restaurant;
+export type { HoursOfOperation, Address };

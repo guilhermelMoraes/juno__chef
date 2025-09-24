@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 // Every other import should go after this line:
-import express from 'express';
 import dotenv from '@dotenvx/dotenvx';
+import express from 'express';
 
-import AppLogger from './shared/logger';
 import router from './router';
 import DatabaseConfig from './shared/database.config';
+import AppLogger from './shared/logger';
 
 class Application {
   private static readonly logger = AppLogger.getInstance();

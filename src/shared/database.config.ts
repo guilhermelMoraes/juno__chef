@@ -1,11 +1,12 @@
-import { DataSource } from "typeorm";
-import AppLogger from "./logger";
-import AddressEntity from "../restaurant/entities/address.entity";
-import RestaurantEntity from "../restaurant/entities/restaurant.entity";
-import HoursOfOperationEntity from "../restaurant/entities/hours-of-operation.entity";
+import { DataSource } from 'typeorm';
+
+import AddressEntity from '../restaurant/entities/address.entity';
+import HoursOfOperationEntity from '../restaurant/entities/hours-of-operation.entity';
+import RestaurantEntity from '../restaurant/entities/restaurant.entity';
+import AppLogger from './logger';
 
 class DatabaseConfig {
-  private constructor() { }
+  private constructor() {}
 
   private readonly logger = AppLogger.getInstance();
   private static instance: null | DatabaseConfig = null;
@@ -19,11 +20,7 @@ class DatabaseConfig {
     username: String(process.env.DB_USERNAME),
     password: String(process.env.DB_PASSWORD),
     synchronize: process.env.NODE_ENV === 'development',
-    entities: [
-      RestaurantEntity,
-      AddressEntity,
-      HoursOfOperationEntity,
-    ],
+    entities: [RestaurantEntity, AddressEntity, HoursOfOperationEntity],
   });
 
   async connect(): Promise<void> {

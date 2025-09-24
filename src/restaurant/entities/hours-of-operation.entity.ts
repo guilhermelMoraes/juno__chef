@@ -1,8 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import RestaurantEntity from "./restaurant.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { HoursOfOperation } from '../restaurant.model';
+import RestaurantEntity from './restaurant.entity';
 
 @Entity('hours_of_operation')
-class HoursOfOperationEntity {
+class HoursOfOperationEntity implements HoursOfOperation {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -10,7 +12,7 @@ class HoursOfOperationEntity {
   days!: string[];
 
   @Column('simple-array')
-  hours!: string[];
+  hours!: string[][];
 
   @ManyToOne(
     () => RestaurantEntity,
