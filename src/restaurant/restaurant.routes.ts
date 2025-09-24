@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import RestaurantRepository from './database/restaurant.repository';
 import RestaurantController from './restaurant.controller';
-import RestaurantRepository from './restaurant.repository';
-import RestaurantEntity from './entities/restaurant.entity';
+import RestaurantEntity from './database/entities/restaurant.entity';
 
 const routes = Router();
 

@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Address } from '../restaurant.model';
 import RestaurantEntity from './restaurant.entity';
+import { Address } from '../../restaurant.model';
 
 @Entity('addresses')
 class AddressEntity implements Address {

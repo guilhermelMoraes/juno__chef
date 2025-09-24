@@ -1,9 +1,9 @@
 import { DataSource } from 'typeorm';
 
-import AddressEntity from '../restaurant/entities/address.entity';
-import HoursOfOperationEntity from '../restaurant/entities/hours-of-operation.entity';
-import RestaurantEntity from '../restaurant/entities/restaurant.entity';
 import AppLogger from './logger';
+import RestaurantEntity from '../restaurant/database/entities/restaurant.entity';
+import AddressEntity from '../restaurant/database/entities/address.entity';
+import HoursOfOperationEntity from '../restaurant/database/entities/hours-of-operation.entity';
 
 class DatabaseConfig {
   private constructor() {}

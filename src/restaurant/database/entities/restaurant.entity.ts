@@ -8,9 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import Restaurant from '../restaurant.model';
 import HoursOfOperationEntity from './hours-of-operation.entity';
+import Restaurant from '../../restaurant.model';
 
+// prettier-ignore
 @Entity('restaurants')
 class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address'> {
   @PrimaryGeneratedColumn('uuid')

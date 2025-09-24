@@ -20,16 +20,18 @@ class RestaurantController {
       });
     } catch (exception) {
       const UNIQUE_VIOLATION_PG_CODE = '23505';
-      const error = exception as Error;
+      const error = exception as any;
 
-      this.logger.warn(`${error.name}: ${error.message}`);
+      if (error.driverError.code === UNIQUE_VIOLATION_PG_CODE) {
+        this.logger.warn(`${error.name}: ${error.message}`);
 
-      if ((error as any).driverError.code === UNIQUE_VIOLATION_PG_CODE) {
         response.status(HttpStatusCodes.CONFLICT).json({
-          error: (error as any).driverError.detail,
+          error: error.driverError.detail,
           data: null,
         });
       } else {
+        this.logger.fatal(`${error.name}: ${error.message}`);
+
         response.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
           error: 'Internal server error. Please, try again later.',
           data: null,

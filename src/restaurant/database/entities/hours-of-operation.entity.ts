@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { HoursOfOperation } from '../restaurant.model';
 import RestaurantEntity from './restaurant.entity';
+import { HoursOfOperation } from '../../restaurant.model';
 
 @Entity('hours_of_operation')
 class HoursOfOperationEntity implements HoursOfOperation {
