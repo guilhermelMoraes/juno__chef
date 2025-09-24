@@ -1,13 +1,14 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import RestaurantEntity from './restaurant.entity';
 import { Address } from '../../restaurant.model';
+import RestaurantEntity from './restaurant.entity';
 
 @Entity('addresses')
 class AddressEntity implements Address {
@@ -36,9 +37,17 @@ class AddressEntity implements Address {
   })
   aptUnit?: string;
 
-  @OneToOne(() => RestaurantEntity, { cascade: true })
+  @OneToOne(() => RestaurantEntity, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'restaurant_id' })
   restaurant!: RestaurantEntity;
+
+  @DeleteDateColumn({
+    select: false,
+    name: 'deleted_at',
+  })
+  deletedAt!: Date;
 }
 
 export default AddressEntity;

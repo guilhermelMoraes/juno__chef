@@ -1,4 +1,4 @@
-import Repository from '../../shared/repository';
+import Repository from '../../shared/database/repository';
 import { Address } from '../restaurant.model';
 import AddressRepository from './address.repository';
 import AddressEntity from './entities/address.entity';

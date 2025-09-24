@@ -57,16 +57,25 @@ class RestaurantEntity implements Omit<Restaurant, 'hoursOfOperation' | 'address
   })
   website?: string;
 
-  @OneToMany(() => HoursOfOperationEntity, (ho) => ho.restaurant)
+  @OneToMany(() => HoursOfOperationEntity, (ho) => ho.restaurant, { cascade: true })
   hoursOfOperation!: HoursOfOperationEntity[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false,
+    name: 'created_at',
+  })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false,
+    name: 'updated_at',
+  })
   updatedAt!: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({
+    select: false,
+    name: 'deleted_at',
+  })
   deletedAt!: Date;
 }
 

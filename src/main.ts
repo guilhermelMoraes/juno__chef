@@ -4,7 +4,7 @@ import dotenv from '@dotenvx/dotenvx';
 import express from 'express';
 
 import router from './router';
-import DatabaseConfig from './shared/database.config';
+import DatabaseConfig from './shared/database/database.config';
 import AppLogger from './shared/logger';
 
 class Application {

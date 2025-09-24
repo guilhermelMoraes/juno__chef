@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import RestaurantEntity from './restaurant.entity';
 import { HoursOfOperation } from '../../restaurant.model';
@@ -17,9 +23,15 @@ class HoursOfOperationEntity implements HoursOfOperation {
   @ManyToOne(
     () => RestaurantEntity,
     (restaurant) => restaurant.hoursOfOperation,
-    { cascade: true },
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
   )
   restaurant!: RestaurantEntity;
+
+  @DeleteDateColumn({
+    select: false,
+    name: 'deleted_at',
+  })
+  deletedAt!: Date;
 }
 
 export default HoursOfOperationEntity;
