@@ -13,7 +13,7 @@ import RestaurantEntity from './restaurant.entity';
 @Entity('addresses')
 class AddressEntity implements IAddress {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number | undefined;
 
   @Column()
   number!: number;
@@ -35,7 +35,7 @@ class AddressEntity implements IAddress {
     length: 40,
     nullable: true,
   })
-  aptUnit?: string;
+  aptUnit: string | undefined;
 
   @OneToOne(() => RestaurantEntity, {
     onDelete: 'CASCADE',

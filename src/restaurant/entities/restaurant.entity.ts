@@ -12,14 +12,14 @@ import { IRestaurant } from '../restaurant.model';
 import HoursOfOperationEntity from './hours-of-operation.entity';
 
 interface IRestaurantEntity extends Omit<IRestaurant, 'address'> {
-  hoursOfOperation: HoursOfOperationEntity[]
+  hoursOfOperation: HoursOfOperationEntity[];
 }
 
 // prettier-ignore
 @Entity('restaurants')
 class RestaurantEntity implements IRestaurantEntity {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+  id: string | undefined;
 
   @Column({
     type: 'varchar',
@@ -32,11 +32,11 @@ class RestaurantEntity implements IRestaurantEntity {
     length: 700,
     nullable: true,
   })
-  description?: string;
+  description: string | undefined;
 
   @Column({
     type: 'varchar',
-    length: 15,
+    length: 20,
     unique: true,
   })
   phone!: string;
@@ -59,7 +59,7 @@ class RestaurantEntity implements IRestaurantEntity {
     length: 200,
     unique: true,
   })
-  website?: string;
+  website: string | undefined;
 
   @OneToMany(() => HoursOfOperationEntity, (ho) => ho.restaurant, { cascade: true })
   hoursOfOperation!: HoursOfOperationEntity[];

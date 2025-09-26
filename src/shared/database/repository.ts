@@ -29,8 +29,7 @@ abstract class Repository<T> implements IRepository<T> {
   }
 
   async update(id: string, data: Partial<T>): Promise<T> {
-    // await this.typeOrmRepo.upda
-    throw new Error('sdfsd');
+    throw new Error('teste');
   }
 }
 

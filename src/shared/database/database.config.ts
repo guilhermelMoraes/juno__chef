@@ -6,7 +6,7 @@ import RestaurantEntity from '../../restaurant/entities/restaurant.entity';
 import AppLogger from '../logger';
 
 class DatabaseConfig {
-  private constructor() { }
+  private constructor() {}
 
   private readonly logger = AppLogger.getInstance();
   private static instance: null | DatabaseConfig = null;

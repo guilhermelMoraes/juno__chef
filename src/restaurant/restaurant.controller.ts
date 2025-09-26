@@ -1,33 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
+import { ValidationError } from 'yup';
 
-import IRepository from '../shared/database/repository.interface';
 import HttpStatusCodes from '../shared/http-codes.enum';
-import AppLogger from '../shared/logger';
 import JunoValidationError from '../shared/juno-validation.error';
+import AppLogger from '../shared/logger';
+import RestaurantService from './restaurant.service';
 
 class RestaurantController {
   private readonly logger = AppLogger.getInstance();
 
-  constructor(private readonly repository: IRepository) {}
+  constructor(private readonly service: RestaurantService) {}
 
   async create(request: Request, response: Response): Promise<void> {
     try {
-      const restaurant = await this.repository.create(request.body);
+      const data = await this.service.create(request.body);
 
       response.status(HttpStatusCodes.CREATED).json({
         message: 'Resource successfully created',
-        data: restaurant,
+        data,
       });
     } catch (exception) {
       const UNIQUE_VIOLATION_PG_CODE = '23505';
       const error = exception as any;
 
-      if (error.driverError.code === UNIQUE_VIOLATION_PG_CODE) {
+      if (error?.driverError?.code === UNIQUE_VIOLATION_PG_CODE) {
         this.logger.warn(`${error.name}: ${error.message}`);
 
         response.status(HttpStatusCodes.CONFLICT).json({
           error: error.driverError.detail,
+          data: null,
+        });
+      } else if (exception instanceof ValidationError) {
+        this.logger.warn(`${exception.name}: ${exception.message}`);
+
+        response.status(HttpStatusCodes.BAD_REQUEST).json({
+          error: exception.message,
           data: null,
         });
       } else {
@@ -38,7 +46,7 @@ class RestaurantController {
 
   async delete(request: Request, response: Response): Promise<void> {
     try {
-      await this.repository.delete(String(request.params.id));
+      await this.service.delete(String(request.params.id));
       response.status(HttpStatusCodes.NO_CONTENT).json({
         message: 'Resource successfully deleted',
         data: null,

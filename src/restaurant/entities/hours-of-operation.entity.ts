@@ -18,7 +18,7 @@ class HoursOfOperationEntity implements IHoursOfOperation {
   days!: string[];
 
   @Column('simple-array')
-  hours!: string[][];
+  hours!: Date[][];
 
   @ManyToOne(
     () => RestaurantEntity,

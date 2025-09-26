@@ -20,6 +20,7 @@ class RestaurantRepository extends Repository<RestaurantEntity> {
     const { address, hoursOfOperation } = data;
 
     const restaurant = await super.create(data);
+
     await this.addressRepository.create({ ...address, restaurant });
 
     hoursOfOperation?.forEach(async (hoursOp) => {

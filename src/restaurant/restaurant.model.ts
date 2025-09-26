@@ -1,15 +1,16 @@
 import { object, string } from 'yup';
 
-import { IAddress } from './value-objects/address.value-object';
+import Address, { IAddress } from './value-objects/address.value-object';
+import HoursOfOperation, { IHoursOfOperation } from './value-objects/hours-of-operation.value-object';
 
 interface IRestaurant {
-  id?: string;
+  id?: string | undefined;
   name: string;
-  description?: string;
+  description?: string | undefined;
   phone: string;
   cnpj: string;
   owner: string;
-  website?: string;
+  website?: string | undefined;
   hoursOfOperation: IHoursOfOperation[];
   address: IAddress;
 }
@@ -25,14 +26,11 @@ class Restaurant {
       .typeError('description must a string')
       .optional(),
     phone: string()
-      .max(18, 'phone must have a max of 18 characters')
-      .matches(
-        /^[\+]?[0-9]{0,3}\W?+[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
-        {
-          message: 'phone must be a valid phone number',
-          excludeEmptyString: true,
-        },
-      )
+      .max(20, 'phone must have a max of 20 characters')
+      .matches(/^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm, {
+        message: 'phone must be a valid phone number',
+        excludeEmptyString: true,
+      })
       .required('phone is a required property')
       .typeError('phone must be a string'),
     cnpj: string()
@@ -52,13 +50,18 @@ class Restaurant {
       .max(200, 'website must have a max of 200 characters')
       .typeError('website must a string')
       .optional(),
+    address: Address.addressValidationSchema,
+    hoursOfOperation: HoursOfOperation.hoursOfOperationValidationSchema,
   });
 
-  static async validate(data: Partial<IRestaurant>): Promise<void> {
-    await this.restaurantValidationSchema.validate(data);
+  static async validate(data: Partial<IRestaurant>): Promise<IRestaurant> {
+    const success = await this.restaurantValidationSchema.validate(data, {
+      strict: true,
+    });
+
+    return success;
   }
 }
 
 export default Restaurant;
 export type { IRestaurant };
-
