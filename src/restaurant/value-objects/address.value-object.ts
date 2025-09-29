@@ -1,35 +1,44 @@
 import { number, object, string } from 'yup';
 
+import {
+  matchesMsg,
+  maxMsg,
+  requiredMsg,
+  typeErrorMsg,
+} from '../../shared/utils/error-messages';
+
 interface IAddress {
-  number: number;
-  postalCode: string;
-  street: string;
-  aptUnit?: string | undefined;
+  readonly number: number;
+  readonly postalCode: string;
+  readonly street: string;
+  readonly aptUnit?: string | undefined;
 }
 
 class Address {
   static readonly addressValidationSchema = object({
     number: number()
-      .required('number is a required property')
-      .integer('number must be a positive integer')
-      .positive('number must be a positive integer')
-      .typeError('number must be a number'),
-    postalCode: string()
-      .required('postalCode is a required property')
-      .max(11, 'postalCode must have a max of 11 characters')
-      .matches(/^\d{2}\d{3}-\d{3}$/gm, {
-        excludeEmptyString: true,
-        message: 'postalCode must be a valid CEP',
-      })
-      .typeError('postalCode must be a string'),
+      .integer('address.number must be an integer')
+      .positive('address.number must be positive')
+      .lessThan(10000, 'address.number cannot be higher than 9999')
+      .moreThan(0, 'address.number cannot be 0')
+      .required(requiredMsg('address.number'))
+      .typeError(typeErrorMsg('address.number', 'number')),
     street: string()
-      .required('street is a required property')
-      .max(100, 'street must have a max of 100 characters')
-      .typeError('street must be a string'),
+      .required(requiredMsg('address.street'))
+      .max(100, maxMsg('address.street', 100))
+      .typeError(typeErrorMsg('address.street')),
+    postalCode: string()
+      .required(requiredMsg('address.postalCode'))
+      .matches(
+        /^\d{2}\d{3}[-]\d{3}$/gm,
+        matchesMsg('address.postalCode', '99999-999'),
+      )
+      .max(11, maxMsg('address.postalCode', 11))
+      .typeError(typeErrorMsg('address.postalCode')),
     aptUnit: string()
-      .max(40, 'aptUnit must have a max of 40 characters')
       .optional()
-      .typeError('aptUnit must be a string'),
+      .max(40, maxMsg('address.aptUnit', 40))
+      .typeError(typeErrorMsg('address.aptUnit')),
   });
 }
 

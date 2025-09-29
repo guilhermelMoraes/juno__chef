@@ -1,5 +1,13 @@
+/* eslint-disable no-useless-escape */
 import { object, string } from 'yup';
 
+import {
+  matchesMsg,
+  maxMsg,
+  minMsg,
+  requiredMsg,
+  typeErrorMsg,
+} from '../shared/utils/error-messages';
 import Address, { IAddress } from './value-objects/address.value-object';
 import OpenFrom, { IOpenFrom } from './value-objects/open-from.value-object';
 
@@ -18,51 +26,52 @@ interface IRestaurant {
 class Restaurant {
   private static readonly restaurantValidationSchema = object({
     name: string()
-      .required('name is a required property')
-      .max(100, 'name must have a max of 100 characters')
-      .typeError('name must be a string'),
+      .required(requiredMsg('name'))
+      .min(3, minMsg('name', 3))
+      .max(100, maxMsg('name', 100))
+      .typeError(typeErrorMsg('name')),
     description: string()
-      .max(700, 'description must have a max of 700 characters')
-      .typeError('description must a string')
-      .optional(),
+      .optional()
+      .max(700, maxMsg('description', 700))
+      .typeError(typeErrorMsg('description')),
     phone: string()
-      .max(20, 'phone must have a max of 20 characters')
-      .matches(/^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm, {
-        message: 'phone must be a valid phone number',
-        excludeEmptyString: true,
-      })
-      .required('phone is a required property')
-      .typeError('phone must be a string'),
+      .required(requiredMsg('phone'))
+      .matches(
+        /^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm,
+        matchesMsg('phone', '00 (99) 9999[9]-9999'),
+      )
+      .max(20, maxMsg('phone', 20))
+      .typeError(typeErrorMsg('phone')),
     cnpj: string()
-      .matches(/\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/, {
-        message: 'cnpj must be a valid CNPJ',
-        excludeEmptyString: true,
-      })
-      .max(20, 'cnpj must have a max of 20 characters')
-      .required('cnpj is a required property')
-      .typeError('cnpj must be a string'),
+      .required(requiredMsg('cnpj'))
+      .matches(
+        /^[0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2}$/,
+        matchesMsg('cnpj', '99.999.999/9999-99 or 99999999999999'),
+      )
+      .max(20, maxMsg('cnpj', 20))
+      .typeError(typeErrorMsg('cnpj')),
     owner: string()
-      .required('owner is a required property')
-      .max(100, 'owner must have a max of 100 characters')
-      .typeError('owner must be a string'),
+      .required(requiredMsg('owner'))
+      .matches(/^[a-z ,.'-]+$/i, matchesMsg('owner', 'letters only'))
+      .min(5, minMsg('owner', 5))
+      .max(100, maxMsg('owner', 100))
+      .typeError(typeErrorMsg('owner')),
     website: string()
+      .optional()
       .url('website must be a valid URL')
-      .max(200, 'website must have a max of 200 characters')
-      .typeError('website must be a string')
-      .optional(),
+      .max(200, maxMsg('website', 200)),
     address: Address.addressValidationSchema
-      .required('address is a required property')
-      .typeError('address must be an object'),
-    openFrom: OpenFrom.openFromHoursValidationSchema
-      .required('openFrom is a required property')
-      .min(1, 'openFrom must have at least one item')
-      .typeError('openFrom must be an object'),
+      .required(requiredMsg('address'))
+      .typeError(typeErrorMsg('address', 'object')),
+    openFrom: OpenFrom.openFromValidationSchema
+      .required(requiredMsg('openFrom'))
+      .min(1, minMsg('openFrom', 1))
+      .typeError(typeErrorMsg('openFrom', 'array')),
   });
 
-  static async validate(data: Partial<IRestaurant>): Promise<IRestaurant> {
+  static async validate(data: Partial<IRestaurant>): Promise<Partial<IRestaurant>> {
     const success = await this.restaurantValidationSchema.validate(data, {
       strict: true,
-      abortEarly: false,
     });
 
     return success;
