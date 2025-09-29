@@ -4,11 +4,11 @@ import { ValidationError } from 'yup';
 
 import PostgreSqlErrorCodes from '../shared/database/postgresql-error-codes.enum';
 import HttpStatusCodes from '../shared/http-codes.enum';
-import AppLogger from '../shared/logger';
+import AppLogger from '../shared/utils/logger';
 import RestaurantService from './restaurant.service';
 
 class RestaurantController {
-  private readonly logger = AppLogger.getInstance();
+  private readonly logger = new AppLogger('RestaurantController');
 
   constructor(private readonly service: RestaurantService) {}
 
@@ -30,8 +30,8 @@ class RestaurantController {
       await this.service.delete(String(request.params.id));
       response.status(HttpStatusCodes.NO_CONTENT).json({
         success: true,
-        response,
         message: 'Restaurant successfully deleted',
+        data: null,
       });
     } catch (error) {
       this.handleExceptions(response, error);

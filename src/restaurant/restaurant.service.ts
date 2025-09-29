@@ -1,3 +1,4 @@
+import { ValidationError } from 'yup';
 import IRepository from '../shared/database/repository.interface';
 import AddressEntity from './entities/address.entity';
 import OpenFromEntity from './entities/open-from.entity';
@@ -5,9 +6,7 @@ import RestaurantEntity from './entities/restaurant.entity';
 import Restaurant, { IRestaurant } from './restaurant.model';
 
 class RestaurantService {
-  constructor(
-    private readonly restaurantRepo: IRepository<RestaurantEntity>,
-  ) {}
+  constructor(private readonly restaurantRepo: IRepository<RestaurantEntity>) {}
 
   async create(data: Partial<IRestaurant>): Promise<RestaurantEntity> {
     const {
@@ -16,33 +15,41 @@ class RestaurantService {
       ...restaurantData
     } = await Restaurant.validate(data);
 
-    const result = await this.restaurantRepo.operationInTransaction(async (em) => {
-      const rInstance = em.create(RestaurantEntity, restaurantData);
-      const restaurant = await em.save(rInstance);
+    const openFromHoursMatchDaysLength = openFromData?.some((ofData) => ofData.days.length === ofData.hours.length);
 
-      const aInstance = em.create(AddressEntity, {
-        restaurant,
-        ...addressData,
-      });
-      await em.save(aInstance);
+    if (!openFromHoursMatchDaysLength) {
+      throw new ValidationError(`openFrom[i].hours and openFrom[i].days must have the same length`);
+    }
 
-      const openFromHours = openFromData.map(
-        (opFrom): Partial<OpenFromEntity> => {
-          return { restaurant, ...opFrom };
-        },
-      );
+    const result = await this.restaurantRepo.operationInTransaction(
+      async (em) => {
+        const rInstance = em.create(RestaurantEntity, restaurantData);
+        const restaurant = await em.save(rInstance);
 
-      const oInstance = em.create(OpenFromEntity, openFromHours);
-      await em.save(oInstance);
+        const aInstance = em.create(AddressEntity, {
+          restaurant,
+          ...addressData,
+        });
+        await em.save(aInstance);
 
-      return restaurant;
-    });
+        const openFromHours = openFromData?.map(
+          (opFrom): Partial<OpenFromEntity> => {
+            return { restaurant, ...opFrom };
+          },
+        );
+
+        const oInstance = em.create(OpenFromEntity, openFromHours);
+        await em.save(oInstance);
+
+        return restaurant;
+      },
+    );
 
     return result;
   }
 
   async delete(id: string) {
-    throw new Error('teste');
+    await this.restaurantRepo.delete(id);
   }
 }
 

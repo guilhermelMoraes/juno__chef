@@ -7,8 +7,8 @@ import RestaurantService from './restaurant.service';
 
 const routes = Router();
 
-const restaurantRepo = new RestaurantRepository(RestaurantEntity);
-const service = new RestaurantService(restaurantRepo);
+const repository = new RestaurantRepository(RestaurantEntity);
+const service = new RestaurantService(repository);
 const controller = new RestaurantController(service);
 
 routes.post('', controller.create.bind(controller));

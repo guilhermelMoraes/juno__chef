@@ -17,12 +17,12 @@ class OpenFromEntity implements IOpenFrom {
   @Column({
     type: 'simple-array',
   })
-  days!: string[];
+  readonly days!: string[];
 
   @Column({
     type: 'simple-array',
   })
-  hours!: string[][];
+  readonly hours!: string[][];
 
   @ManyToOne(() => RestaurantEntity, (restaurant) => restaurant.openFrom, {
     onDelete: 'CASCADE',

@@ -5,10 +5,10 @@ import express from 'express';
 
 import v1router from './router';
 import DatabaseConfig from './shared/database/database.config';
-import AppLogger from './shared/logger';
+import AppLogger from './shared/utils/logger';
 
 class Application {
-  private static readonly logger = AppLogger.getInstance();
+  private static readonly logger = new AppLogger('Application');
   private static readonly port = parseInt(process.env.SERVER_PORT!) || 3000;
 
   static async main(): Promise<void> {

@@ -2,8 +2,8 @@ import { array, object, string, tuple } from 'yup';
 import { matchesMsg, minMsg, requiredMsg, typeErrorMsg } from '../../shared/utils/error-messages';
 
 interface IOpenFrom {
-  days: string[];
-  hours: string[][];
+  readonly days: string[];
+  readonly hours: string[][];
 }
 
 class OpenFrom {
@@ -21,7 +21,6 @@ class OpenFrom {
       'day string in openFrom.days array must be a valid weekday',
     )
     .required(requiredMsg('day'))
-    
 
   private static readonly hourValidationSchema = string()
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/gm, matchesMsg('hour', 'HH:MM'))
@@ -44,7 +43,6 @@ class OpenFrom {
       .min(1)
       .required()
   })
-    
 
   static readonly openFromValidationSchema = array().of(this.openFrom);
 }

@@ -3,12 +3,12 @@ import { DataSource } from 'typeorm';
 import AddressEntity from '../../restaurant/entities/address.entity';
 import OpenFromEntity from '../../restaurant/entities/open-from.entity';
 import RestaurantEntity from '../../restaurant/entities/restaurant.entity';
-import AppLogger from '../logger';
+import AppLogger from '../utils/logger';
 
 class DatabaseConfig {
   private constructor() {}
 
-  private readonly logger = AppLogger.getInstance();
+  private readonly logger = new AppLogger('DatabaseConfig');
   private static instance: null | DatabaseConfig = null;
 
   readonly appDataSource = new DataSource({
