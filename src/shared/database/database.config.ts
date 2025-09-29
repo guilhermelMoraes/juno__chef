@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 
 import AddressEntity from '../../restaurant/entities/address.entity';
-import HoursOfOperationEntity from '../../restaurant/entities/hours-of-operation.entity';
+import OpenFromEntity from '../../restaurant/entities/open-from.entity';
 import RestaurantEntity from '../../restaurant/entities/restaurant.entity';
 import AppLogger from '../logger';
 
@@ -20,7 +20,7 @@ class DatabaseConfig {
     username: String(process.env.DB_USERNAME),
     password: String(process.env.DB_PASSWORD),
     synchronize: process.env.NODE_ENV === 'development',
-    entities: [RestaurantEntity, AddressEntity, HoursOfOperationEntity],
+    entities: [RestaurantEntity, AddressEntity, OpenFromEntity],
   });
 
   async connect(): Promise<void> {

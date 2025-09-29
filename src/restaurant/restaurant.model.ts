@@ -1,7 +1,7 @@
 import { object, string } from 'yup';
 
 import Address, { IAddress } from './value-objects/address.value-object';
-import HoursOfOperation, { IHoursOfOperation } from './value-objects/hours-of-operation.value-object';
+import OpenFrom, { IOpenFrom } from './value-objects/open-from.value-object';
 
 interface IRestaurant {
   id?: string | undefined;
@@ -11,7 +11,7 @@ interface IRestaurant {
   cnpj: string;
   owner: string;
   website?: string | undefined;
-  hoursOfOperation: IHoursOfOperation[];
+  openFrom: IOpenFrom[];
   address: IAddress;
 }
 
@@ -40,23 +40,29 @@ class Restaurant {
       })
       .max(20, 'cnpj must have a max of 20 characters')
       .required('cnpj is a required property')
-      .typeError('cnpj must a string'),
+      .typeError('cnpj must be a string'),
     owner: string()
       .required('owner is a required property')
       .max(100, 'owner must have a max of 100 characters')
-      .typeError('owner must a string'),
+      .typeError('owner must be a string'),
     website: string()
       .url('website must be a valid URL')
       .max(200, 'website must have a max of 200 characters')
-      .typeError('website must a string')
+      .typeError('website must be a string')
       .optional(),
-    address: Address.addressValidationSchema,
-    hoursOfOperation: HoursOfOperation.hoursOfOperationValidationSchema,
+    address: Address.addressValidationSchema
+      .required('address is a required property')
+      .typeError('address must be an object'),
+    openFrom: OpenFrom.openFromHoursValidationSchema
+      .required('openFrom is a required property')
+      .min(1, 'openFrom must have at least one item')
+      .typeError('openFrom must be an object'),
   });
 
   static async validate(data: Partial<IRestaurant>): Promise<IRestaurant> {
     const success = await this.restaurantValidationSchema.validate(data, {
       strict: true,
+      abortEarly: false,
     });
 
     return success;

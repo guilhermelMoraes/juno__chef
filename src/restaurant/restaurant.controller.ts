@@ -2,8 +2,8 @@
 import { Request, Response } from 'express';
 import { ValidationError } from 'yup';
 
+import PostgreSqlErrorCodes from '../shared/database/postgresql-error-codes.enum';
 import HttpStatusCodes from '../shared/http-codes.enum';
-import JunoValidationError from '../shared/juno-validation.error';
 import AppLogger from '../shared/logger';
 import RestaurantService from './restaurant.service';
 
@@ -15,32 +15,13 @@ class RestaurantController {
   async create(request: Request, response: Response): Promise<void> {
     try {
       const data = await this.service.create(request.body);
-
       response.status(HttpStatusCodes.CREATED).json({
-        message: 'Resource successfully created',
+        success: true,
+        message: 'Restaurant successfully created',
         data,
       });
-    } catch (exception) {
-      const UNIQUE_VIOLATION_PG_CODE = '23505';
-      const error = exception as any;
-
-      if (error?.driverError?.code === UNIQUE_VIOLATION_PG_CODE) {
-        this.logger.warn(`${error.name}: ${error.message}`);
-
-        response.status(HttpStatusCodes.CONFLICT).json({
-          error: error.driverError.detail,
-          data: null,
-        });
-      } else if (exception instanceof ValidationError) {
-        this.logger.warn(`${exception.name}: ${exception.message}`);
-
-        response.status(HttpStatusCodes.BAD_REQUEST).json({
-          error: exception.message,
-          data: null,
-        });
-      } else {
-        this.internalServerError(response, exception);
-      }
+    } catch (error) {
+      this.handleExceptions(response, error);
     }
   }
 
@@ -48,29 +29,54 @@ class RestaurantController {
     try {
       await this.service.delete(String(request.params.id));
       response.status(HttpStatusCodes.NO_CONTENT).json({
-        message: 'Resource successfully deleted',
-        data: null,
+        success: true,
+        response,
+        message: 'Restaurant successfully deleted',
       });
-    } catch (exception) {
-      if (exception instanceof JunoValidationError) {
-        this.logger.warn(exception);
-        response.status(HttpStatusCodes.NOT_FOUND).json({
-          error: exception.message,
-          data: null,
-        });
-      } else {
-        this.internalServerError(response, exception);
-      }
+    } catch (error) {
+      this.handleExceptions(response, error);
     }
   }
 
-  private internalServerError(response: Response, exception: unknown): void {
-    this.logger.fatal(exception);
+  private handleExceptions(response: Response, error: unknown) {
+    const errorObject = error as Record<string, any>;
 
-    response.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: 'Internal server error. Please, try again later.',
-      data: null,
-    });
+    if ('driverError' in errorObject) {
+      switch (errorObject.driverError.code) {
+        case PostgreSqlErrorCodes.NOT_NULL_VIOLATION:
+          this.logger.warn(errorObject);
+
+          response.status(HttpStatusCodes.BAD_REQUEST).json({
+            success: false,
+            error: `${errorObject.driverError.column} cannot be null`,
+          });
+          break;
+        case PostgreSqlErrorCodes.UNIQUE_VIOLATION:
+          this.logger.warn(errorObject);
+
+          response.status(HttpStatusCodes.CONFLICT).json({
+            success: false,
+            error: `${(errorObject.detail as string).substring(4).replaceAll(/[()=.]/g, '')} and cannot be repeated`,
+          });
+          break;
+      }
+    } else if (error instanceof ValidationError) {
+      this.logger.warn(errorObject);
+
+      response.status(HttpStatusCodes.BAD_REQUEST).json({
+        success: false,
+        error: error.message,
+        data: null,
+      });
+    } else {
+      this.logger.fatal(errorObject);
+
+      response.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: 'Internal server error. Please, try again later.',
+        data: null,
+      });
+    }
   }
 }
 

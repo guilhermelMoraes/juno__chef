@@ -9,10 +9,10 @@ import {
 } from 'typeorm';
 
 import { IRestaurant } from '../restaurant.model';
-import HoursOfOperationEntity from './hours-of-operation.entity';
+import OpenFromEntity from './open-from.entity';
 
 interface IRestaurantEntity extends Omit<IRestaurant, 'address'> {
-  hoursOfOperation: HoursOfOperationEntity[];
+  openFrom: OpenFromEntity[];
 }
 
 // prettier-ignore
@@ -58,11 +58,12 @@ class RestaurantEntity implements IRestaurantEntity {
     type: 'varchar',
     length: 200,
     unique: true,
+    nullable: true,
   })
   website: string | undefined;
 
-  @OneToMany(() => HoursOfOperationEntity, (ho) => ho.restaurant, { cascade: true })
-  hoursOfOperation!: HoursOfOperationEntity[];
+  @OneToMany(() => OpenFromEntity, (ho) => ho.restaurant, { cascade: true })
+  openFrom!: OpenFromEntity[];
 
   @CreateDateColumn({
     select: false,

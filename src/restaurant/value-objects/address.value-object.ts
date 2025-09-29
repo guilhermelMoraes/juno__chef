@@ -17,7 +17,7 @@ class Address {
     postalCode: string()
       .required('postalCode is a required property')
       .max(11, 'postalCode must have a max of 11 characters')
-      .matches(/[0-9]{2}(\.|\s)?[0-9]{3}(\.|\s)?[0-9]{2}\n/gm, {
+      .matches(/^\d{2}\d{3}-\d{3}$/gm, {
         excludeEmptyString: true,
         message: 'postalCode must be a valid CEP',
       })
@@ -31,11 +31,6 @@ class Address {
       .optional()
       .typeError('aptUnit must be a string'),
   });
-
-  static async validate(data: Partial<Address>): Promise<Address> {
-    const success = await this.addressValidationSchema.validate(data);
-    return success;
-  }
 }
 
 export default Address;
