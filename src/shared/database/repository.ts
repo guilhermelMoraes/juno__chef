@@ -4,38 +4,46 @@ import {
   ObjectLiteral,
   Repository as TORepository,
 } from 'typeorm';
-
 import { ValidationError } from 'yup';
+
 import DatabaseConfig from './database.config';
 import IRepository from './repository.interface';
 import { DataSource } from 'typeorm/browser';
 
 abstract class Repository<T> implements IRepository<T> {
-  private readonly typeOrmRepo: TORepository<ObjectLiteral>;
+  private readonly entityRepository: TORepository<ObjectLiteral>;
   private readonly ds: DataSource;
 
   constructor(entity: EntityTarget<ObjectLiteral>) {
-    this.typeOrmRepo =
+    this.entityRepository =
       DatabaseConfig.getInstance().appDataSource.getRepository(entity);
 
     this.ds = DatabaseConfig.getInstance().appDataSource;
   }
 
+  async findById(id: string): Promise<T> {
+    const result = await this.entityRepository.findOneBy({ id });
+    if (!result) {
+      throw new ValidationError(`No resource with id ${id} was found`);
+    }
+
+    return result as T;
+  }
+
   async create(data: Partial<T> | Partial<T>[]): Promise<T> {
-    const entity = await this.typeOrmRepo.save(data);
+    const entity = await this.entityRepository.save(data);
     return entity as T;
   }
 
   async delete(id: string): Promise<void> {
-    const result = await this.typeOrmRepo.softDelete(id);
+    const result = await this.entityRepository.softDelete(id);
     if (result.affected === 0) {
-      throw new ValidationError('No resources were deleted');
+      throw new ValidationError(`No resource with id ${id} was found`);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async update(id: string, data: Partial<T>): Promise<T> {
-    throw new Error('teste');
+  async patch(id: string, data: Partial<T>): Promise<void> {
+    await this.entityRepository.update(id, data);
   }
 
   async operationInTransaction(

@@ -1,9 +1,7 @@
 import pino from 'pino';
 
 class AppLogger {
-  constructor(
-    private readonly name: string,
-  ) {}
+  constructor(private readonly name: string) {}
 
   private readonly logger = pino();
 

@@ -24,54 +24,90 @@ interface IRestaurant {
 }
 
 class Restaurant {
-  private static readonly restaurantValidationSchema = object({
+  static readonly restaurantValidationSchema = object({
     name: string()
+      .typeError(typeErrorMsg('name'))
       .required(requiredMsg('name'))
       .min(3, minMsg('name', 3))
       .max(100, maxMsg('name', 100))
-      .typeError(typeErrorMsg('name')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
     description: string()
       .optional()
-      .max(700, maxMsg('description', 700))
-      .typeError(typeErrorMsg('description')),
+      .typeError(typeErrorMsg('description'))
+      .max(700, maxMsg('description', 700)),
     phone: string()
+      .typeError(typeErrorMsg('phone'))
       .required(requiredMsg('phone'))
       .matches(
         /^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm,
         matchesMsg('phone', '00 (99) 9999[9]-9999'),
       )
       .max(20, maxMsg('phone', 20))
-      .typeError(typeErrorMsg('phone')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
     cnpj: string()
+      .typeError(typeErrorMsg('cnpj'))
       .required(requiredMsg('cnpj'))
       .matches(
         /^[0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2}$/,
         matchesMsg('cnpj', '99.999.999/9999-99 or 99999999999999'),
       )
       .max(20, maxMsg('cnpj', 20))
-      .typeError(typeErrorMsg('cnpj')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
     owner: string()
+      .typeError(typeErrorMsg('owner'))
       .required(requiredMsg('owner'))
       .matches(/^[a-z ,.'-]+$/i, matchesMsg('owner', 'letters only'))
       .min(5, minMsg('owner', 5))
       .max(100, maxMsg('owner', 100))
-      .typeError(typeErrorMsg('owner')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
     website: string()
       .optional()
       .url('website must be a valid URL')
       .max(200, maxMsg('website', 200)),
     address: Address.addressValidationSchema
+      .typeError(typeErrorMsg('address', 'object'))
       .required(requiredMsg('address'))
-      .typeError(typeErrorMsg('address', 'object')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
     openFrom: OpenFrom.openFromValidationSchema
+      .typeError(typeErrorMsg('openFrom', 'array'))
       .required(requiredMsg('openFrom'))
       .min(1, minMsg('openFrom', 1))
-      .typeError(typeErrorMsg('openFrom', 'array')),
+      .when('$update', {
+        is: false,
+        then: (schema) => schema,
+        otherwise: (schema) => schema.optional(),
+      }),
   });
 
-  static async validate(data: Partial<IRestaurant>): Promise<Partial<IRestaurant>> {
+  static async validate(
+    data: Partial<IRestaurant>,
+    makeAllOptional: boolean = false,
+  ): Promise<Partial<IRestaurant>> {
     const success = await this.restaurantValidationSchema.validate(data, {
       strict: true,
+      context: {
+        update: makeAllOptional,
+      },
     });
 
     return success;

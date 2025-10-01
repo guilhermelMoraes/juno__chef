@@ -12,6 +12,21 @@ class RestaurantController {
 
   constructor(private readonly service: RestaurantService) {}
 
+  async findById(request: Request, response: Response): Promise<void> {
+    try {
+      const restaurant = await this.service.findOne(
+        request.params.id as string,
+      );
+      response.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: 'Restaurant successfully retrieved',
+        data: restaurant,
+      });
+    } catch (error) {
+      this.handleExceptions(response, error);
+    }
+  }
+
   async create(request: Request, response: Response): Promise<void> {
     try {
       const data = await this.service.create(request.body);
@@ -31,6 +46,19 @@ class RestaurantController {
       response.status(HttpStatusCodes.NO_CONTENT).json({
         success: true,
         message: 'Restaurant successfully deleted',
+        data: null,
+      });
+    } catch (error) {
+      this.handleExceptions(response, error);
+    }
+  }
+
+  async update(request: Request, response: Response): Promise<void> {
+    try {
+      await this.service.update(request.params.id as string, request.body);
+      response.status(HttpStatusCodes.NO_CONTENT).json({
+        success: true,
+        message: 'Restaurant successfully updated',
         data: null,
       });
     } catch (error) {
