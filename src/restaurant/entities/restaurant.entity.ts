@@ -4,11 +4,13 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { IRestaurant } from '../restaurant.model';
+import AddressEntity from './address.entity';
 import OpenFromEntity from './open-from.entity';
 
 interface IRestaurantEntity extends Omit<IRestaurant, 'address'> {
@@ -61,6 +63,9 @@ class RestaurantEntity implements IRestaurantEntity {
     nullable: true,
   })
   website: string | undefined;
+
+  @OneToOne(() => AddressEntity, (address) => address.restaurant)
+  address!: AddressEntity
 
   @OneToMany(() => OpenFromEntity, (ho) => ho.restaurant, { cascade: true })
   openFrom!: OpenFromEntity[];

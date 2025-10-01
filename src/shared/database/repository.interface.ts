@@ -1,7 +1,11 @@
 import { EntityManager } from 'typeorm';
 
+type FindOptions = {
+  relations?: Record<string, boolean>;
+};
+
 interface IRepository<T = unknown> {
-  findById(id: string): Promise<T>;
+  findById(id: string, options: FindOptions): Promise<T>;
   create(data: Partial<T>): Promise<T>;
   delete(id: string): Promise<void>;
   patch(id: string, data: Partial<T>): Promise<void>;
@@ -11,3 +15,4 @@ interface IRepository<T = unknown> {
 }
 
 export default IRepository;
+export type { FindOptions };

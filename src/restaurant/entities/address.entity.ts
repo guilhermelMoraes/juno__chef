@@ -40,7 +40,7 @@ class AddressEntity implements IAddress {
   @OneToOne(() => RestaurantEntity, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'restaurant_id' })
+  @JoinColumn()
   restaurant!: RestaurantEntity;
 
   @DeleteDateColumn({

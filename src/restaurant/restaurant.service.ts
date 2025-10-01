@@ -52,7 +52,9 @@ class RestaurantService {
   }
 
   async findOne(id: string): Promise<RestaurantEntity> {
-    return this.repository.findById(id);
+    return this.repository.findById(id, {
+      relations: { address: true, openFrom: true },
+    });
   }
 
   async update(id: string, data: Partial<IRestaurant>): Promise<void> {

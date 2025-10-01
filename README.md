@@ -14,4 +14,4 @@ In order to run the project, the following tools must be installed. The versions
 
 Before running the project, make sure to give the `./dev.sh` shell script permission to be executed:
 
-`chmod +x .dev.sh`
+`chmod +x dev.sh`

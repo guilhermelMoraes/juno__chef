@@ -6,9 +6,9 @@ import {
 } from 'typeorm';
 import { ValidationError } from 'yup';
 
-import DatabaseConfig from './database.config';
-import IRepository from './repository.interface';
 import { DataSource } from 'typeorm/browser';
+import DatabaseConfig from './database.config';
+import IRepository, { FindOptions } from './repository.interface';
 
 abstract class Repository<T> implements IRepository<T> {
   private readonly entityRepository: TORepository<ObjectLiteral>;
@@ -21,8 +21,14 @@ abstract class Repository<T> implements IRepository<T> {
     this.ds = DatabaseConfig.getInstance().appDataSource;
   }
 
-  async findById(id: string): Promise<T> {
-    const result = await this.entityRepository.findOneBy({ id });
+  async findById(id: string, options: FindOptions): Promise<T> {
+    const result = await this.entityRepository.findOne({
+      where: {
+        id,
+      },
+      ...options,
+    });
+
     if (!result) {
       throw new ValidationError(`No resource with id ${id} was found`);
     }

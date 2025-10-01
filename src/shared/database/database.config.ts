@@ -21,6 +21,7 @@ class DatabaseConfig {
     password: String(process.env.DB_PASSWORD),
     synchronize: process.env.NODE_ENV === 'development',
     entities: [RestaurantEntity, AddressEntity, OpenFromEntity],
+    logging: ['error', 'info', 'log', 'migration', 'warn'],
   });
 
   async connect(): Promise<void> {

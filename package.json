@@ -4,7 +4,8 @@
   "main": "src/main.ts",
   "scripts": {
     "dev": "./dev.sh",
-    "lint": "prettier src/**/*.{ts,json} --write && eslint src/**/*.ts"
+    "lint": "prettier src/**/*.{ts,json} --write && eslint src/**/*.ts",
+    "transpile": "tsc"
   },
   "repository": {
     "type": "git",
