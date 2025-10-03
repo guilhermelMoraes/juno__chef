@@ -23,6 +23,11 @@ interface IRestaurant {
   address: IAddress;
 }
 
+type ValidationOptions = {
+  makeAllOptional?: boolean | undefined;
+  abortEarly?: boolean | undefined;
+};
+
 class Restaurant {
   static readonly restaurantValidationSchema = object({
     name: string()
@@ -38,6 +43,7 @@ class Restaurant {
     description: string()
       .optional()
       .typeError(typeErrorMsg('description'))
+      .min(40, minMsg('description', 40))
       .max(700, maxMsg('description', 700)),
     phone: string()
       .typeError(typeErrorMsg('phone'))
@@ -101,13 +107,14 @@ class Restaurant {
 
   static async validate(
     data: Partial<IRestaurant>,
-    makeAllOptional: boolean = false,
+    { abortEarly = true, makeAllOptional = false }: ValidationOptions = {},
   ): Promise<Partial<IRestaurant>> {
     const success = await this.restaurantValidationSchema.validate(data, {
       strict: true,
       context: {
         update: makeAllOptional,
       },
+      abortEarly,
     });
 
     return success;
