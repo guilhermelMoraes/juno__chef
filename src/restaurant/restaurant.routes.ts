@@ -1,19 +1,14 @@
 import { Router } from 'express';
 
-import RestaurantEntity from './entities/restaurant.entity';
-import RestaurantRepository from './repositories/restaurant.repository';
 import RestaurantController from './restaurant.controller';
-import RestaurantService from './restaurant.service';
 
 const routes = Router();
 
-const repository = new RestaurantRepository(RestaurantEntity);
-const service = new RestaurantService(repository);
-const controller = new RestaurantController(service);
+const restaurantController = new RestaurantController();
 
-routes.get('/:id', controller.findById.bind(controller));
-routes.post('', controller.create.bind(controller));
-routes.patch('/:id', controller.update.bind(controller));
-routes.delete('/:id', controller.delete.bind(controller));
+routes.get('/:id', restaurantController.findById.bind(restaurantController));
+routes.post('', restaurantController.create.bind(restaurantController));
+routes.patch('/:id', restaurantController.update.bind(restaurantController));
+routes.delete('/:id', restaurantController.delete.bind(restaurantController));
 
 export default routes;

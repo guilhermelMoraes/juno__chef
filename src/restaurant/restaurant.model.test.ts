@@ -1,7 +1,11 @@
-import { ValidationError } from 'yup';
 import { faker } from '@faker-js/faker/locale/pt_BR';
+import { ValidationError } from 'yup';
 
-import { matchesMsg, minMsg, requiredMsg } from '../shared/utils/error-messages';
+import {
+  matchesMsg,
+  minMsg,
+  requiredMsg,
+} from '../shared/utils/error-messages';
 import Restaurant from './restaurant.model';
 
 describe('Restaurant validations', () => {
@@ -87,17 +91,22 @@ describe('Restaurant validations', () => {
     const cnpj = faker.helpers.replaceSymbols('##.###.###/0001-##');
 
     try {
-      const result = await Restaurant.validate({
-        cnpj,
-      }, {
-        makeAllOptional: true,
-      });
+      const result = await Restaurant.validate(
+        {
+          cnpj,
+        },
+        {
+          makeAllOptional: true,
+        },
+      );
 
       expect(result.cnpj).toEqual(cnpj);
     } catch (error) {
       if (error instanceof Error) {
-        expect(error.message).toBe(matchesMsg('cnpjk', '99.999.999/9999-99 or 99999999999999'))
+        expect(error.message).toBe(
+          matchesMsg('cnpj', '99.999.999/9999-99 or 99999999999999'),
+        );
       }
     }
-  })
+  });
 });

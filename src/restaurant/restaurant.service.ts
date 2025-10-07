@@ -1,13 +1,13 @@
 import { ValidationError } from 'yup';
 
-import IRepository from '../shared/database/repository.interface';
 import AddressEntity from './entities/address.entity';
 import OpenFromEntity from './entities/open-from.entity';
 import RestaurantEntity from './entities/restaurant.entity';
+import RestaurantRepository from './repositories/restaurant.repository';
 import Restaurant, { IRestaurant } from './restaurant.model';
 
 class RestaurantService {
-  constructor(private readonly repository: IRepository<RestaurantEntity>) {}
+  private readonly repository = new RestaurantRepository();
 
   async create(data: Partial<IRestaurant>): Promise<RestaurantEntity> {
     const {
@@ -58,7 +58,7 @@ class RestaurantService {
   }
 
   async update(id: string, data: Partial<IRestaurant>): Promise<void> {
-    const result = await Restaurant.validate(data, true);
+    const result = await Restaurant.validate(data, { makeAllOptional: true });
     await this.repository.patch(id, result as Partial<RestaurantEntity>);
   }
 

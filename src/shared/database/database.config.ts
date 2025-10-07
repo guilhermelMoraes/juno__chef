@@ -12,7 +12,7 @@ class DatabaseConfig {
   private static instance: null | DatabaseConfig = null;
 
   readonly appDataSource = new DataSource({
-    applicationName: 'juno-kitchen',
+    applicationName: 'juno-chef',
     type: 'postgres',
     host: String(process.env.DB_HOST),
     port: parseInt(process.env.DB_PORT!),

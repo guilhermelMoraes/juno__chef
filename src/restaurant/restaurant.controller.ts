@@ -9,8 +9,7 @@ import RestaurantService from './restaurant.service';
 
 class RestaurantController {
   private readonly logger = new AppLogger('RestaurantController');
-
-  constructor(private readonly service: RestaurantService) {}
+  private readonly service: RestaurantService = new RestaurantService();
 
   async findById(request: Request, response: Response): Promise<void> {
     try {
@@ -66,7 +65,7 @@ class RestaurantController {
     }
   }
 
-  private handleExceptions(response: Response, error: unknown) {
+  protected handleExceptions(response: Response, error: unknown): void {
     const errorObject = error as Record<string, any>;
 
     if ('driverError' in errorObject) {

@@ -1,4 +1,4 @@
-# Juno — Kitchen 👨🏻‍🍳
+# Juno — Chef 👨🏻‍🍳
 
 The RESTFUL API for the Juno project.
 

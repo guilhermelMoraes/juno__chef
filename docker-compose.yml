@@ -1,4 +1,4 @@
-name: juno-kitchen
+name: juno
 services:
   postgresql:
     container_name: juno-postgresql
@@ -18,9 +18,13 @@ services:
     ports:
       - 8080:8080
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: juno-admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: jun0-s3cret_p4ssw0rd
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
     command: ["start-dev"]
+    restart: unless-stopped
+    volumes:
+      - keycloak_data:/opt/keycloak/data
 
 volumes:
   postgresql_data:
+  keycloak_data:

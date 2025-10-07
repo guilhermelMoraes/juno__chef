@@ -1,5 +1,6 @@
 {
-  "name": "kitchen",
+  "name": "chef",
+  "description": "Juno's main API",
   "version": "1.0.0",
   "main": "src/main.ts",
   "scripts": {
@@ -10,15 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/guilhermelMoraes/juno-kitchen.git"
+    "url": "git+https://github.com/guilhermelMoraes/juno__chef.git"
   },
   "author": "Guilherme Moraes <moraes.guilherme32@proton.me>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/guilhermelMoraes/juno-kitchen/issues"
+    "url": "https://github.com/guilhermelMoraes/juno__chef/issues"
   },
-  "homepage": "https://github.com/guilhermelMoraes/juno-kitchen#readme",
-  "description": "",
+  "homepage": "https://github.com/guilhermelMoraes/juno__chef#readme",
   "devDependencies": {
     "@babel/core": "^7.28.4",
     "@babel/preset-env": "^7.28.3",

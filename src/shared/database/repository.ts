@@ -21,7 +21,7 @@ abstract class Repository<T> implements IRepository<T> {
     this.ds = DatabaseConfig.getInstance().appDataSource;
   }
 
-  async findById(id: string, options: FindOptions): Promise<T> {
+  async findById(id: string, options?: FindOptions): Promise<T> {
     const result = await this.entityRepository.findOne({
       where: {
         id,

@@ -5,7 +5,7 @@ type FindOptions = {
 };
 
 interface IRepository<T = unknown> {
-  findById(id: string, options: FindOptions): Promise<T>;
+  findById(id: string, options?: FindOptions): Promise<T>;
   create(data: Partial<T>): Promise<T>;
   delete(id: string): Promise<void>;
   patch(id: string, data: Partial<T>): Promise<void>;

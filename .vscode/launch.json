@@ -3,7 +3,7 @@
   "configurations": [
     {
       "type": "node-terminal",
-      "name": "Debug juno-kitchen",
+      "name": "Debug juno-chef",
       "request": "launch",
       "command": "npm run dev",
       "cwd": "${workspaceFolder}"
